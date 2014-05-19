@@ -69,7 +69,7 @@ public class Corner extends StandOutWindow {
 
 	@Override
 	public int getAppIcon() {
-		return R.drawable.notif_icon;
+		return 0;
 	}
 
 	@Override
@@ -127,94 +127,94 @@ public class Corner extends StandOutWindow {
 		return super.getFlags(corner) | StandOutFlags.FLAG_WINDOW_FOCUSABLE_DISABLE | StandOutFlags.FLAG_WINDOW_EDGE_LIMITS_ENABLE;
 	}
 
-	@Override
-	public String getPersistentNotificationMessage(int corner) {
-		return "Tap to configure";
-	}
+//	@Override
+//	public String getPersistentNotificationMessage(int corner) {
+//		return "Tap to configure";
+//	}
 
-	@Override
-	public Intent getPersistentNotificationIntent(int corner) {
-		return new Intent(this, Corner.class).putExtra("id", corner).setAction(ACTION_SETTINGS);
-	}
-
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (intent != null) {
-			String action = intent.getAction();
-			int corner = intent.getIntExtra("id", DEFAULT_ID);
-			if (corner == ONGOING_NOTIFICATION_ID) {
-				throw new RuntimeException("ID cannot equals StandOutWindow.ONGOING_NOTIFICATION_ID");
-			}
-
-			if (ACTION_SHOW.equals(action) || ACTION_RESTORE.equals(action)) {
-				show(corner);
-			} else if (ACTION_SETTINGS.equals(action)) {
-				try {
-					Intent intentS = new Intent(this, SettingsActivity.class);
-					intentS.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(intentS);
-				} catch (Exception e) {
-					// Addressing this issue: http://i.imgur.com/Op9kfy8.png
-				}
-			} else if (ACTION_HIDE.equals(action)) {
-				hide(corner);
-			} else if (ACTION_CLOSE.equals(action)) {
-				close(corner);
-			} else if (ACTION_CLOSE_ALL.equals(action)) {
-				closeAll();
-			} else if (ACTION_SEND_DATA.equals(action)) {
-				if (isExistingId(corner) || corner == DISREGARD_ID) {
-					Bundle data = intent.getBundleExtra("wei.mark.standout.data");
-					int requestCode = intent.getIntExtra("requestCode", 0);
-					@SuppressWarnings("unchecked")
-					Class<? extends StandOutWindow> fromCls = (Class<? extends StandOutWindow>) intent.getSerializableExtra("wei.mark.standout.fromCls");
-					int fromId = intent.getIntExtra("fromId", DEFAULT_ID);
-					onReceiveData(corner, requestCode, data, fromCls, fromId);
-				}
-			}
-		}
-		return START_NOT_STICKY;
-	}
-
-	@Override
-	public boolean onClose(final int corner, final Window window) {
-		running = false;
-		return false;
-	}
-
-	@Override
-	public String getPersistentNotificationTitle(int corner) {
-		return "Rounded Corners";
-	}
-
-	@SuppressLint({ "InlinedApi", "NewApi" })
-	@SuppressWarnings("deprecation")
-	@Override
-	public Notification getPersistentNotification(int id) {
-		int icon = getAppIcon();
-		long when = System.currentTimeMillis();
-		Context c = getApplicationContext();
-		String contentTitle = getPersistentNotificationTitle(id);
-		String contentText = getPersistentNotificationMessage(id);
-
-		Intent notificationIntent = getPersistentNotificationIntent(id);
-
-		PendingIntent contentIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		// 4.1+ Low priority notification
-		final int apiLevel = Build.VERSION.SDK_INT;
-		if (apiLevel >= 16) {
-			Notification.Builder mBuilder = new Notification.Builder(this).setContent(new RemoteViews(getPackageName(), R.layout.notification)).setSmallIcon(getAppIcon()).setContentTitle(contentTitle).setContentText(contentText).setPriority(Notification.PRIORITY_MIN).setContentIntent(contentIntent);
-			return mBuilder.build();
-		}
-
-		String tickerText = String.format("%s: %s", contentTitle, contentText);
-
-		Notification notification = new Notification(icon, tickerText, when);
-		notification.setLatestEventInfo(c, contentTitle, contentText, contentIntent);
-
-		return notification;
-	}
+//	@Override
+//	public Intent getPersistentNotificationIntent(int corner) {
+//		return new Intent(this, Corner.class).putExtra("id", corner).setAction(ACTION_SETTINGS);
+//	}
+//
+//	@Override
+//	public int onStartCommand(Intent intent, int flags, int startId) {
+//		if (intent != null) {
+//			String action = intent.getAction();
+//			int corner = intent.getIntExtra("id", DEFAULT_ID);
+//			if (corner == ONGOING_NOTIFICATION_ID) {
+//				throw new RuntimeException("ID cannot equals StandOutWindow.ONGOING_NOTIFICATION_ID");
+//			}
+//
+//			if (ACTION_SHOW.equals(action) || ACTION_RESTORE.equals(action)) {
+//				show(corner);
+//			} else if (ACTION_SETTINGS.equals(action)) {
+//				try {
+//					Intent intentS = new Intent(this, SettingsActivity.class);
+//					intentS.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//					startActivity(intentS);
+//				} catch (Exception e) {
+//					// Addressing this issue: http://i.imgur.com/Op9kfy8.png
+//				}
+//			} else if (ACTION_HIDE.equals(action)) {
+//				hide(corner);
+//			} else if (ACTION_CLOSE.equals(action)) {
+//				close(corner);
+//			} else if (ACTION_CLOSE_ALL.equals(action)) {
+//				closeAll();
+//			} else if (ACTION_SEND_DATA.equals(action)) {
+//				if (isExistingId(corner) || corner == DISREGARD_ID) {
+//					Bundle data = intent.getBundleExtra("wei.mark.standout.data");
+//					int requestCode = intent.getIntExtra("requestCode", 0);
+//					@SuppressWarnings("unchecked")
+//					Class<? extends StandOutWindow> fromCls = (Class<? extends StandOutWindow>) intent.getSerializableExtra("wei.mark.standout.fromCls");
+//					int fromId = intent.getIntExtra("fromId", DEFAULT_ID);
+//					onReceiveData(corner, requestCode, data, fromCls, fromId);
+//				}
+//			}
+//		}
+//		return START_NOT_STICKY;
+//	}
+//
+//	@Override
+//	public boolean onClose(final int corner, final Window window) {
+//		running = false;
+//		return false;
+//	}
+//
+//	@Override
+//	public String getPersistentNotificationTitle(int corner) {
+//		return "Rounded Corners";
+//	}
+//
+//	@SuppressLint({ "InlinedApi", "NewApi" })
+//	@SuppressWarnings("deprecation")
+//	@Override
+//	public Notification getPersistentNotification(int id) {
+//		int icon = getAppIcon();
+//		long when = System.currentTimeMillis();
+//		Context c = getApplicationContext();
+//		String contentTitle = getPersistentNotificationTitle(id);
+//		String contentText = getPersistentNotificationMessage(id);
+//
+//		Intent notificationIntent = getPersistentNotificationIntent(id);
+//
+//		PendingIntent contentIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//		// 4.1+ Low priority notification
+//		final int apiLevel = Build.VERSION.SDK_INT;
+//		if (apiLevel >= 16) {
+//			Notification.Builder mBuilder = new Notification.Builder(this).setContent(new RemoteViews(getPackageName(), R.layout.notification)).setSmallIcon(getAppIcon()).setContentTitle(contentTitle).setContentText(contentText).setPriority(Notification.PRIORITY_MIN).setContentIntent(contentIntent);
+//			return mBuilder.build();
+//		}
+//
+//		String tickerText = String.format("%s: %s", contentTitle, contentText);
+//
+//		Notification notification = new Notification(icon, tickerText, when);
+//		notification.setLatestEventInfo(c, contentTitle, contentText, contentIntent);
+//
+//		return notification;
+//	}
 
 	@Override
 	public boolean onShow(final int corner, final Window window) {

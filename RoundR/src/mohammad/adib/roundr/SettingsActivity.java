@@ -43,28 +43,28 @@ public class SettingsActivity extends PreferenceActivity {
 				return true;
 			}
 		});
-		// Notification
-		final int apiLevel = Build.VERSION.SDK_INT;
-		if (apiLevel >= 16) {
-			((Preference) findPreference("notification")).setOnPreferenceClickListener(new OnPreferenceClickListener() {
-				public boolean onPreferenceClick(Preference preference) {
-					new AlertDialog.Builder(SettingsActivity.this).setTitle("Notification").setMessage("The notification prevents Android from killing RoundR in low memory situations.\n\nOn Android 4.1+ devices, it can be disabled via the App Info.").setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							showInstalledAppDetails("mohammad.adib.roundr");
-						}
-					}).show();
-					return true;
-				}
-			});
-		}else{
-			((Preference) findPreference("notification")).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-				@Override
-				public boolean onPreferenceChange(Preference preference, Object newValue) {
-					StandOutWindow.sendData(SettingsActivity.this, Corner.class, Corner.wildcard, Corner.NOTIFICATION_CODE, new Bundle(), Corner.class, StandOutWindow.DISREGARD_ID);
-					return true;
-				}
-			});
-		}
+//		// Notification
+//		final int apiLevel = Build.VERSION.SDK_INT;
+//		if (apiLevel >= 16) {
+//			((Preference) findPreference("notification")).setOnPreferenceClickListener(new OnPreferenceClickListener() {
+//				public boolean onPreferenceClick(Preference preference) {
+//					new AlertDialog.Builder(SettingsActivity.this).setTitle("Notification").setMessage("The notification prevents Android from killing RoundR in low memory situations.\n\nOn Android 4.1+ devices, it can be disabled via the App Info.").setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+//						public void onClick(DialogInterface dialog, int which) {
+//							showInstalledAppDetails("mohammad.adib.roundr");
+//						}
+//					}).show();
+//					return true;
+//				}
+//			});
+//		}else{
+//			((Preference) findPreference("notification")).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+//				@Override
+//				public boolean onPreferenceChange(Preference preference, Object newValue) {
+//					StandOutWindow.sendData(SettingsActivity.this, Corner.class, Corner.wildcard, Corner.NOTIFICATION_CODE, new Bundle(), Corner.class, StandOutWindow.DISREGARD_ID);
+//					return true;
+//				}
+//			});
+//		}
 		// Enable specific corners
 		for (int i = 0; i < 4; i++) {
 			((Preference) findPreference("corner" + i)).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
